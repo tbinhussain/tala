@@ -1,14 +1,14 @@
-<?php
+?php
 $product_array = $db_handle->runQuery("SELECT * FROM tblproduct ORDER BY id ASC");
 if (!empty($product_array)) {
     foreach($product_array as $key=>$value){
         ?>
         <div class="product-item">
             <form method="post" action="index.php?action=add&code=<?php echo $product_array[$key]["code"]; ?>">
-                <div class="product-image"><img src="<?php echo $product_array[$key]["image"]; ?>"></div>
+                <div class="small-container"><img src="<?php echo $product_array[$key]["image"]; ?>"></div>
                 <div class="product-tile-footer">
-                    <div class="product-title"><?php echo $product_array[$key]["name"]; ?></div>
-                    <div class="product-price"><?php echo "$".$product_array[$key]["price"]; ?></div>
+                    <div class="col-4"><?php echo $product_array[$key]["name"]; ?></div>
+                    <div class="col-4"><?php echo "$".$product_array[$key]["price"]; ?></div>
                     <div class="cart-action"><input type="text" class="product-quantity" name="quantity" value="1" size="2" /><input type="submit" value="Add to Cart" class="btnAddAction" /></div>
                 </div>
             </form>
@@ -77,74 +77,3 @@ $item_price = $item["quantity"]*$item["price"];
                $total_price += ($item["price"]*$item["quantity"]);
        }
        ?>
-#list cart items from the php session
-<tr>
-<td colspan="2" align="right">Total:</td>
-<td align="right"><?php echo $total_quantity; ?></td>
-<td align="right" colspan="2"><strong><?php echo "$ ".number_format($total_price, 2); ?></strong></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<?php
-} else {
-?>
-<div class="no-records">Your Cart is Empty</div>
-<?php
-}
-
-</div>
-
-case "remove":
-   if(!empty($_SESSION["cart_item"])) {
-       foreach($_SESSION["cart_item"] as $k => $v) {
-           if($_GET["code"] == $k)
-               unset($_SESSION["cart_item"][$k]);
-           if(empty($_SESSION["cart_item"]))
-               unset($_SESSION["cart_item"]);
-       }
-   }
-   break;
-case "empty":
-   unset($_SESSION["cart_item"]);
-break;
---
--- Table structure for table `tblproduct`
---
-
-CREATE TABLE `tblproduct` (
-`id` int(8) NOT NULL,
-`name` varchar(255) NOT NULL,
-`code` varchar(255) NOT NULL,
-`image` text NOT NULL,
-`price` double(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tblproduct`
---
-
-INSERT INTO `tblproduct` (`id`, `name`, `code`, `image`, `price`) VALUES
-(1, 'FinePix Pro2 3D Camera', '3DcAM01', 'product-images/camera.jpg', 1500.00),
-(2, 'EXP Portable Hard Drive', 'USB02', 'product-images/external-hard-drive.jpg', 800.00),
-(3, 'Luxury Ultra thin Wrist Watch', 'wristWear03', 'product-images/watch.jpg', 300.00),
-(4, 'XP 1155 Intel Core Laptop', 'LPN45', 'product-images/laptop.jpg', 800.00);
-
---
--- Indexes for table `tblproduct`
---
-ALTER TABLE `tblproduct`
-ADD PRIMARY KEY (`id`),
-ADD UNIQUE KEY `product_code` (`code`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `tblproduct`
---
-ALTER TABLE `tblproduct`
-MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-COMMIT;
-?>
